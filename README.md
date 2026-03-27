@@ -19,7 +19,7 @@ Ce projet est avant tout **éducatif**, mais vise une implémentation proche des
 ---
 
 ## Architecture du projet
-
+```
 src/
 │
 ├── math/ → vecteurs, opérations mathématiques
@@ -27,6 +27,7 @@ src/
 ├── physics/ → collisions, résolution
 ├── utils/ → constantes, helpers
 └── main.ts → point d’entrée
+```
 
 ---
 
