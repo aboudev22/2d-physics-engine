@@ -120,8 +120,132 @@ class Vector {
    * const u = v.normalise
    * console.log(u); // Vector { x: 0.447, y: 0.894 }
    */
-  get normalise(): Vector {
+  get normalize(): Vector {
     const mag = this.magnitude;
     return mag === 0 ? new Vector() : new Vector(this.x / mag, this.y / mag);
+  }
+
+  /**
+   * Multiplication par un scalaire.
+   *
+   * @params {number} k - Nombre (scalaire) par lequel est
+   * multiplier le vecteur.
+   *
+   * @returns {Vector} Nouveau vecteur égale à
+   * `this.x * k, this.y * k`
+   *
+   * @example
+   * const u = new Vector(2, 3);
+   * const v = u.mult(3);
+   * console.log(v); // Vector { x: 6, y: 9 }
+   */
+  mult(k: number): Vector {
+    return new Vector(this.x * k, this.y * k);
+  }
+
+  /**
+   * Division par un scalaire.
+   *
+   * @params {number} k - Scalaire par lequel on divise notre vecteur.
+   * @returns {Vector} Vecteur égale à `this.x / k, this.y / k`
+   *
+   * @example
+   * const v = new Vector(1, 2);
+   * const u = v.divide(2);
+   * console.log(u); // Vector { x: 0.5, y: 1 }
+   */
+  divide(k: number): Vector {
+    return new Vector(this.x / k, this.y / k);
+  }
+
+  /**
+   * Retourne l'angle (en radians) entre la direction allant de `this`
+   * vers `v` et l'axe des abscisses (x).
+   *
+   * Autrement dit, on calacule l'angle du vecteur `(v - this)`.
+   * Utile pour orienter un objet vers une cible.
+   *
+   * @param {Vector} v - le vecteur cible
+   * @returns {number} angle en radians
+   *
+   * @example
+   * const a = new Vector(1, 2);
+   * const b = new Vector(3, 4);
+   * const angle = a.angle(b);
+   * console.log(angle); //
+   */
+  angle(v: Vector): number {
+    return Math.atan2(v.y - this.y, v.x - this.x);
+  }
+
+  /**
+   * Retourne un nouveau vecteur dont les composantes sont
+   * les opposées de celles de ce vecteur.
+   *
+   * @returns {Vector} nouveau vecteur `{-this.x, -this.y}
+   * @example
+   * const v = new Vector(2, 3);
+   * console.log(v.neg); // Vector { x: -2, y: -3 }
+   */
+  get neg(): Vector {
+    return this.mult(-1);
+  }
+
+  /**
+   * Retourne un nouveau vecteur dont les composantes sont
+   * issues de la rotation de ce vecteur par un angle
+   * (en radians) passé en paramètre.
+   *
+   * @param angle - angle de rotation
+   * @returns {Vector} vecteur issue de la rotation.
+   * @example
+   *
+   * const u = new Vector(1, 2);
+   * const v = u.rotate(5);
+   * console.log(v); // Vector { x: 2.2015, y: -0.3915 }
+   */
+  rotate(angle: number): Vector {
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+    const x = this.x * cos - this.y * sin;
+    const y = this.x * sin + this.y * cos;
+    return new Vector(x, y);
+  }
+
+  /**
+   * Retourne un vecteur dont on a fait tourné autour d'un
+   * point spécifié d'un certains un angle.
+   *
+   * @param angle - angle de rotation
+   * @param point - point autour du quel on fait la rotation
+   * @returns {Vector} Vecteur après rotation
+   *
+   * @example
+   * const u = new Vector(1, 2);
+   * const v = u.rotateAbout(5);
+   * console.log(v); // Vector { x: 1, y: 0 }
+   */
+  rotateAbout(angle: number, point: Vector): Vector {
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+    const x = point.x + ((this.x - point.x) * cos - (this.y - point.y) * sin);
+    const y = point.y + ((this.x - point.x) * sin - (this.y - point.y) * cos);
+    return new Vector(x, y);
+  }
+
+  /**
+   * Retourne un vecteur perpendiculaire à ce vecteur.
+   * Utile pour determiner la normale à un vecteur.
+   *
+   * @param negate - Valeur booléen pour determiner si on
+   * donne la perpendiculaire à 90 ou -90 dégré.
+   *
+   * @returns {Vector} nouveau vecteur perpendiculaire à
+   * ce vecteur.
+   *
+   */
+  perp(negate: boolean = false): Vector {
+    const neg = negate === true ? -1 : 1;
+    return new Vector(neg * -this.y, neg * this.x);
   }
 }
